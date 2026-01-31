@@ -1,0 +1,15 @@
+# 本地配置，勿提交（含 API Token）
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# 输出目录（可选，若不想提交生成图可取消注释）
+# output/
+
+# 会话状态目录（包含 state.json 和中间结果）
+sessions/
