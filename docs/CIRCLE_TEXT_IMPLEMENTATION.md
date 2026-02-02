@@ -231,7 +231,7 @@ PRESETS = {
 
 ### 1. 直接Skill调用
 ```python
-from circle_text_skill import CircleTextLayoutSkill
+from skills.circle_text_skill import CircleTextLayoutSkill
 
 skill = CircleTextLayoutSkill()
 config = {

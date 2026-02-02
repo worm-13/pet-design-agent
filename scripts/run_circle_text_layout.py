@@ -19,7 +19,7 @@ from PIL import Image
 # 添加项目根目录到路径
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-from circle_text_skill import CircleTextLayoutSkill
+from skills.circle_text_skill import CircleTextLayoutSkill
 
 
 def load_config_from_file(config_path: str) -> dict:
@@ -105,6 +105,7 @@ def run_circle_text_layout(
     center_x: int = None,
     center_y: int = None,
     radius: int = 300,
+    canvas_rotation: float = 0,
     start_angle: float = 0,
     clockwise: bool = True,
     orientation: str = "outward",
@@ -176,7 +177,8 @@ def run_circle_text_layout(
                 "width": width,
                 "height": height,
                 "center": [center_x, center_y],
-                "radius": radius
+                "radius": radius,
+                "canvas_rotation_deg": canvas_rotation
             },
             "phrases": phrases,
             "layout": {
@@ -266,6 +268,7 @@ def main():
     canvas_group.add_argument("--center-x", type=int, help="圆心X坐标 (默认: 宽度/2)")
     canvas_group.add_argument("--center-y", type=int, help="圆心Y坐标 (默认: 高度/2)")
     canvas_group.add_argument("--radius", type=int, default=300, help="圆半径 (默认: 300)")
+    canvas_group.add_argument("--canvas-rotation", type=float, default=0, help="整个画布旋转角度(度) (默认: 0)")
 
     # 布局设置
     layout_group = parser.add_argument_group('布局设置')
@@ -324,6 +327,7 @@ def main():
             center_x=args.center_x,
             center_y=args.center_y,
             radius=args.radius,
+            canvas_rotation=args.canvas_rotation,
             start_angle=args.start_angle,
             clockwise=args.clockwise,
             orientation=args.orientation,

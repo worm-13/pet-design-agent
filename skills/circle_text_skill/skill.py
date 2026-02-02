@@ -46,14 +46,18 @@ class CircleTextLayoutSkill:
         height = canvas_config.get("height", 800)
         center = tuple(canvas_config.get("center", [width//2, height//2]))
         radius = canvas_config.get("radius", min(width, height) * 0.4)
+        canvas_rotation_deg = canvas_config.get("canvas_rotation_deg", 0)
 
-        # 创建或使用基础图像
+        # 创建基础图像（背景）
         if base_image is None:
-            result_image = Image.new("RGBA", (width, height), (255, 255, 255, 0))
+            background_image = Image.new("RGBA", (width, height), (255, 255, 255, 0))
         else:
-            result_image = base_image.convert("RGBA")
-            if result_image.size != (width, height):
-                result_image = result_image.resize((width, height), Image.Resampling.LANCZOS)
+            background_image = base_image.convert("RGBA")
+            if background_image.size != (width, height):
+                background_image = background_image.resize((width, height), Image.Resampling.LANCZOS)
+
+        # 创建文字图层（透明背景）
+        text_layer = Image.new("RGBA", (width, height), (0, 0, 0, 0))
 
         # 布局设置
         start_angle_deg = layout_config.get("start_angle_deg", 0)
@@ -111,12 +115,24 @@ class CircleTextLayoutSkill:
             # 标准化角度
             phrase_start_angle = normalize_angle(phrase_start_angle)
 
-            # 渲染短语
+            # 渲染短语到文字图层
             self._render_phrase(
-                result_image, phrase, center, radius, phrase_start_angle,
+                text_layer, phrase, center, radius, phrase_start_angle,
                 font, char_tracking_px, word_spacing_px, fill_rgba,
                 clockwise, supersample, orientation
             )
+
+        # 应用文字图层的旋转
+        if canvas_rotation_deg != 0:
+            text_layer = text_layer.rotate(
+                -canvas_rotation_deg,  # PIL旋转方向与数学相反
+                resample=Image.Resampling.BICUBIC,
+                expand=False,  # 不扩展画布，保持原有尺寸
+                center=center  # 以圆心为旋转中心
+            )
+
+        # 将旋转后的文字图层合成到背景图片上
+        result_image = Image.alpha_composite(background_image, text_layer)
 
         return result_image
 

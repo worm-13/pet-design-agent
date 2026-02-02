@@ -104,15 +104,17 @@ def draw_single_char(
 
     # 计算旋转角度（支持orientation）
     angle_deg = math.degrees(angle_rad)
-    base_rot = 90 if clockwise else -90
+
+    # 切线方向统一定义
+    tangent_rot = angle_deg + 90
 
     if orientation == "outward":
-        rotation_deg = angle_deg + base_rot
+        rotation_deg = tangent_rot
     elif orientation == "inward":
-        rotation_deg = angle_deg + base_rot + 180
+        rotation_deg = tangent_rot + 180
     else:
         # fallback：保证向后兼容
-        rotation_deg = angle_deg + base_rot
+        rotation_deg = tangent_rot
 
     # 旋转字符
     char_image = char_image.rotate(
@@ -157,43 +159,49 @@ def render_word_on_circle(
         start_angle_rad: 起始角度（弧度）
         font: 字体对象
         char_tracking_px: 字符间距
-        clockwise: 是否顺时针
+        clockwise: 是否顺时针（保留向后兼容）
         supersample: 超采样倍数
+        orientation: 文字朝向 ("outward" 或 "inward")
 
     Returns:
         渲染结束后的角度（弧度）
     """
+    from .font_metrics import get_char_advance
+
+    # 根据 orientation 决定推进方向（核心逻辑）
+    if orientation == "outward":
+        direction = +1  # 顺时针推进
+    elif orientation == "inward":
+        direction = -1  # 逆时针推进
+    else:
+        direction = +1  # 默认 fallback
+
+    # 推进方向对应的有效 clockwise 值
+    effective_clockwise = direction > 0
+
     current_angle = start_angle_rad
     prev_char = None
 
-    for char in word:
+    for char in word:  # 字符顺序始终保持原始文本顺序
         if not char.strip():
             prev_char = char
             continue
 
         # 获取字符前进量
-        from .font_metrics import get_char_advance
         advance = get_char_advance(char, font, prev_char)
 
         # 计算字符中心角度
-        char_center_angle = current_angle
-        if clockwise:
-            char_center_angle += (advance / 2) / radius
-        else:
-            char_center_angle -= (advance / 2) / radius
+        char_center_angle = current_angle + direction * (advance / 2) / radius
 
         # 绘制字符
         draw_single_char(
             image, char, center, radius, char_center_angle,
-            font, fill_rgba, clockwise, supersample, orientation
+            font, fill_rgba, effective_clockwise, supersample, orientation
         )
 
-        # 更新角度
+        # 更新角度（使用 direction 统一推进方向）
         angle_increment = (advance + char_tracking_px) / radius
-        if clockwise:
-            current_angle += angle_increment
-        else:
-            current_angle -= angle_increment
+        current_angle += direction * angle_increment
 
         prev_char = char
 

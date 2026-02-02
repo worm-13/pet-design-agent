@@ -18,7 +18,7 @@
 ## 📦 安装使用
 
 ```python
-from circle_text_skill import CircleTextLayoutSkill
+from skills.circle_text_skill import CircleTextLayoutSkill
 
 skill = CircleTextLayoutSkill()
 image = skill.render(base_image=None, config=config)
@@ -92,7 +92,7 @@ config = {
 
 ### 宠物定制
 ```python
-from circle_text_skill.presets import get_config_for_pet_name
+from skills.circle_text_skill.presets import get_config_for_pet_name
 
 config = get_config_for_pet_name("Max")
 skill = CircleTextLayoutSkill()
@@ -101,7 +101,7 @@ image = skill.render(None, config)
 
 ### 徽章设计
 ```python
-from circle_text_skill.presets import BADGE_CONFIG
+from skills.circle_text_skill.presets import BADGE_CONFIG
 
 config = BADGE_CONFIG.copy()
 config["phrases"] = ["EXCELLENCE", "ACHIEVEMENT", "COMMITMENT"]
@@ -111,7 +111,7 @@ image = skill.render(None, config)
 
 ### 品牌LOGO
 ```python
-from circle_text_skill.presets import LOGO_CONFIG
+from skills.circle_text_skill.presets import LOGO_CONFIG
 
 config = LOGO_CONFIG.copy()
 config["phrases"] = ["BRAND", "NAME"]
@@ -135,7 +135,7 @@ python -m circle_text_skill.demo
 ## 🏗️ 模块结构
 
 ```
-circle_text_skill/
+skills/circle_text_skill/
 ├── __init__.py              # 包初始化
 ├── skill.py                 # 主Skill类
 ├── geometry.py              # 几何计算

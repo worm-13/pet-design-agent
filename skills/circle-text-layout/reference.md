@@ -147,7 +147,8 @@ def composite_layers(base_image, text_layers):
     "width": 800,
     "height": 800,
     "center": [400, 400],
-    "radius": 300
+    "radius": 300,
+    "canvas_rotation_deg": 0
   },
   "phrases": ["TEXT", "PHRASES"],
   "layout": {
@@ -253,6 +254,46 @@ class CircleTextLayoutSkill:
         pass
 ```
 
+## Canvas旋转功能
+
+### 实现原理
+
+Canvas旋转功能只旋转文字图层，背景图片保持不动：
+
+```python
+# 创建背景和文字图层
+background_image = base_image  # 背景保持不动
+text_layer = Image.new("RGBA", size, (0, 0, 0, 0))  # 文字图层
+
+# 渲染文字到文字图层
+# ... 渲染逻辑 ...
+
+# 只旋转文字图层
+if canvas_rotation_deg != 0:
+    text_layer = text_layer.rotate(
+        -canvas_rotation_deg,
+        resample=Image.Resampling.BICUBIC,
+        expand=False,
+        center=center  # 以圆心为旋转中心
+    )
+
+# 合成最终结果
+result_image = Image.alpha_composite(background_image, text_layer)
+```
+
+### 使用场景
+
+- **动态调整角度**：根据设计需求调整文字圆形的方向
+- **品牌定制**：为不同场景提供最佳的视觉角度
+- **动画制作**：支持旋转动画的静态帧生成
+
+### 技术要点
+
+- **旋转中心**：以画布中心为旋转轴心
+- **保持尺寸**：使用`expand=False`保持原有画布尺寸
+- **质量保证**：使用BICUBIC插值确保旋转质量
+- **RGBA支持**：正确处理透明通道的旋转
+
 ## 验收标准
 
 ### 功能验收
@@ -317,3 +358,4 @@ def debug_anchors(image, anchors, center, radius):
 - **v1.2.0**: 实现三层架构，支持单词级间距
 - **v1.3.0**: 添加kerning支持和防裁切设计
 - **v2.0.0**: 重构为标准Skill格式，支持配置系统
+- **v2.1.0**: 添加Canvas旋转功能，支持整个文字圆形绕圆心旋转

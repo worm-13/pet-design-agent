@@ -19,6 +19,7 @@ description: 三层圆形文字排版Skill。支持短语级均分、单词级�
 - ✅ **等角度分布**：短语按圆周等分，智能处理单/多单词输入
 - ✅ **居中对齐**：每个短语在锚点处自动居中对齐
 - ✅ **灵活配置**：支持顺时针/逆时针、自定义起始角度
+- ✅ **文字图层旋转**：支持文字圆形绕圆心旋转任意角度，背景图片保持不动
 
 ### 视觉优化
 - ✅ **切线旋转**：字符沿圆切线方向自然排列
@@ -41,7 +42,8 @@ description: 三层圆形文字排版Skill。支持短语级均分、单词级�
     "width": 800,
     "height": 800,
     "center": [400, 400],
-    "radius": 300
+    "radius": 300,
+    "canvas_rotation_deg": 0
   },
   "phrases": ["I LOVE YOU", "I LOVE YOU", "I LOVE YOU"],
   "layout": {
@@ -156,4 +158,4 @@ config = {
 
 - 技术实现细节见 [reference.md](reference.md)
 - 预设配置和示例见项目中的 `examples_circle_text_skill.py`
-- 现有实现参考 `circle_text_skill/` 目录
+- 现有实现参考 `skills/circle_text_skill/` 目录
