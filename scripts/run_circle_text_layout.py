@@ -107,6 +107,7 @@ def run_circle_text_layout(
     radius: int = 300,
     start_angle: float = 0,
     clockwise: bool = True,
+    orientation: str = "outward",
     font_path: str = "assets/fonts/AaHuanLeBao-2.ttf",
     font_size: int = 48,
     color_r: int = 0,
@@ -181,7 +182,8 @@ def run_circle_text_layout(
             "layout": {
                 "start_angle_deg": start_angle,
                 "clockwise": clockwise,
-                "align": "center"
+                "align": "center",
+                "orientation": orientation
             },
             "spacing": {
                 "char_tracking_px": char_tracking,
@@ -270,6 +272,8 @@ def main():
     layout_group.add_argument("--start-angle", type=float, default=0, help="起始角度(度) (默认: 0)")
     layout_group.add_argument("--counter-clockwise", action="store_false", dest="clockwise",
                              help="逆时针方向 (默认: 顺时针)")
+    layout_group.add_argument("--orientation", choices=["outward", "inward"], default="outward",
+                             help="文字朝向 (默认: outward)")
 
     # 字体设置
     font_group = parser.add_argument_group('字体设置')
@@ -322,6 +326,7 @@ def main():
             radius=args.radius,
             start_angle=args.start_angle,
             clockwise=args.clockwise,
+            orientation=args.orientation,
             font_path=args.font_path,
             font_size=args.font_size,
             color_r=args.color_r,

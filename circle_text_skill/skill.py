@@ -59,6 +59,7 @@ class CircleTextLayoutSkill:
         start_angle_deg = layout_config.get("start_angle_deg", 0)
         clockwise = layout_config.get("clockwise", True)
         align = layout_config.get("align", "center")
+        orientation = layout_config.get("orientation", "outward")
 
         # 间距设置
         char_tracking_px = spacing_config.get("char_tracking_px", 1.5)
@@ -114,7 +115,7 @@ class CircleTextLayoutSkill:
             self._render_phrase(
                 result_image, phrase, center, radius, phrase_start_angle,
                 font, char_tracking_px, word_spacing_px, fill_rgba,
-                clockwise, supersample
+                clockwise, supersample, orientation
             )
 
         return result_image
@@ -131,7 +132,8 @@ class CircleTextLayoutSkill:
         word_spacing_px: float,
         fill_rgba: tuple,
         clockwise: bool,
-        supersample: int
+        supersample: int,
+        orientation: str
     ):
         """
         渲染单个短语
@@ -161,7 +163,7 @@ class CircleTextLayoutSkill:
             # 渲染单词
             end_angle = render_word_on_circle(
                 image, word, center, radius, current_angle,
-                font, char_tracking_px, clockwise, supersample
+                font, char_tracking_px, clockwise, supersample, orientation, fill_rgba
             )
 
             # 添加单词间距（除了最后一个单词）
