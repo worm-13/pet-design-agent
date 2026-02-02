@@ -18,6 +18,7 @@ description: 编排完整宠物定制图像工作流，协调项目内技能按�
 | `template-application` | 应用产品模板 |
 | `pet-image-position-adjustment` | 宠物位置/大小 |
 | `text-style-adjustment` | 文字内容与样式 |
+| `circle-text-layout` | 圆形文字排版与渲染 |
 
 ## 默认工作流（初次生成）
 
@@ -43,6 +44,9 @@ description: 编排完整宠物定制图像工作流，协调项目内技能按�
 6. **应用默认文字样式**
    - 使用 **text-style-adjustment**，应用默认文字内容与样式。
 
+7. **应用圆形文字装饰（可选）**
+   - 根据产品类型，使用 **circle-text-layout** 添加圆形文字装饰。
+
 完成后，**始终返回当前最新生成的产品图路径**。
 
 ## 按指令执行（增量更新）
@@ -53,12 +57,14 @@ description: 编排完整宠物定制图像工作流，协调项目内技能按�
 |---------|------|------------|
 | 与**位置或大小**相关 | 仅做位置/大小调整 | **pet-image-position-adjustment** |
 | 与**文字内容或样式**相关 | 仅做文字修改 | **text-style-adjustment** |
-| 明确表示**抠图不好/重抠** | 重跑抠图及依赖步骤（补齐→模板→位置→文字） | **pet-image-matting**，再按需 **pet-image-completion** → **template-application** → **pet-image-position-adjustment** → **text-style-adjustment** |
+| 与**圆形文字**相关 | 仅调整圆形文字布局 | **circle-text-layout** |
+| 明确表示**抠图不好/重抠** | 重跑抠图及依赖步骤（补齐→模板→位置→文字→圆形文字） | **pet-image-matting**，再按需 **pet-image-completion** → **template-application** → **pet-image-position-adjustment** → **text-style-adjustment** → **circle-text-layout** |
 | **小幅优化/画质优化** | 仅做画质增强 | **image-quality-enhancement** |
 
 - 与位置/大小无关的指令：**不**调用 pet-image-position-adjustment。
 - 与文字无关的指令：**不**调用 text-style-adjustment。
-- 未要求重抠或重置时：**不**重跑清晰度增强或补齐步骤。
+- 与圆形文字无关的指令：**不**调用 circle-text-layout。
+- 未要求重抠或重置时：**不**重跑清晰度增强、补齐或圆形文字步骤。
 
 ## 约束
 
@@ -76,7 +82,8 @@ description: 编排完整宠物定制图像工作流，协调项目内技能按�
 - `extracted.png` — 抠图结果
 - `completed.png` — 补齐结果（若有）
 - `design.png` — 模板合成后的设计图
-- `final.png` — 当前最新产品图（位置/文字调整后）
+- `design_with_text.png` — 应用文字样式后的设计图
+- `final.png` — 当前最新产品图（包含圆形文字装饰）
 
 编排器根据**文件是否存在**判断某步是否已完成，从而决定是跳过还是执行。详见 [reference.md](reference.md)。
 

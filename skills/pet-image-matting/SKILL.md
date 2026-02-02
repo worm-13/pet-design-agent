@@ -16,12 +16,27 @@ description: 抠出无背景的宠物主体（透明 PNG）。用户提供宠物
 
 ## 输入与输出
 
-
 | 类型  | 参数                | 必填  | 说明                                            |
 | --- | ----------------- | --- | --------------------------------------------- |
 | 输入  | `image`           | 是   | 宠物原图文件路径                                      |
-| 输入  | `pet_type`        | 否   | 提取范围：`head`、`half_body`、`full_body`，默认 `head` |
+| 输入  | `pet_type`        | 否   | 提取范围：`head`、`half_body`、`full_body`；若提供 state 则从 `state.crop_mode` 读取 |
+| 输入  | `state`           | 否   | state.json 路径或 dict，包含 `crop_mode` 字段 |
 | 输出  | `extracted_image` | —   | 提取后的宠物图像本地路径                                  |
+
+### state.crop_mode（Agent 决策层写入）
+
+```json
+{
+  "crop_mode": "head" | "half" | "full"
+}
+```
+
+- `head` → `pet_type=head`
+- `half` → `pet_type=half_body`
+- `full` → `pet_type=full_body`
+- 默认值：`"half"`
+
+**Matting Skill 只读取 state，不做决策。** 决策由 Agent / 编排器负责。
 
 
 ## 工作流程
@@ -32,15 +47,15 @@ description: 抠出无背景的宠物主体（透明 PNG）。用户提供宠物
 4. **调用模型**：通过 Replicate 调用 `google/nano-banana`，传入图像与提示，获取输出。
 5. **保存并返回**：将模型输出下载并保存为本地文件，将该路径作为 `extracted_image` 返回。
 
-## 提示词映射
+## 提示词映射（三种抠图模式）
 
-| `pet_type`  | 说明 |
-| ----------- | ---- |
-| `head`      | 仅保留宠物头部：无脖颈/身体/底部阴影，边缘清晰，背景为与毛发融合的浅色。完整英文提示词见 [reference.md](reference.md)。 |
-| `half_body` | Extract the pet from head to half body (upper half), remove background, keep subject clear. |
-| `full_body` | Extract the full body of the pet, remove background, keep subject clear. |
+| `pet_type`  | 模式 | 说明 |
+| ----------- | ---- | ---- |
+| `head`      | Head Only（仅头部） | 仅保留头部，无脖颈/身体/底部阴影，边缘圆滑干净。 |
+| `half_body` | Head + Upper Body（半身） | 头部 + 颈、胸、上躯干，下边界自然收于中躯干。 |
+| `full_body` | Full Body（全身） | 头至爪、四肢与尾巴完整可见，不裁切。 |
 
-可根据模型表现微调措辞，见 [reference.md](reference.md)。
+每种模式使用**一段固定、完整提示词**（见 `scripts/run_pet_image_matting.py` 中 `PROMPTS`），不动态拼接。通用规则：不重绘、不风格化、不失真；边缘 crisp and clean；完全去除背景与地面阴影。详见 [reference.md](reference.md)。
 
 ## 实现要点
 

@@ -10,10 +10,10 @@
 | 小幅画质优化（按指令） | `image-quality-enhancement` | 仅做画质优化时单独调用 |
 | 步骤 2：宠物抠图 | `pet-image-matting` | 输出透明背景宠物图 |
 | 步骤 3：缺失补齐 | `pet-image-completion` | 抠图缺耳朵/身体时补齐 |
-| 步骤 4：模板应用 | `template-application` | 图层合成：宠物 PNG + 背景图（无 AI） |
-| 步骤 5：默认位置 | `pet-image-position-adjustment` | 已含在合成 layout 中 |
-| 步骤 6：文字 | `text-style-adjustment` | 按需添加/编辑/删除文字 |
-| 按指令：位置/大小 | `pet-image-position-adjustment` | 只改 layout 后重新跑合成脚本 |
+| 步骤 4：模板应用 | `template-application` | 合成背景、宠物与文字 |
+| 步骤 5：默认位置 | `pet-image-position-adjustment` | 应用默认宠物位置/大小 |
+| 步骤 6：默认文字 | `text-style-adjustment` | 应用默认文字内容与样式 |
+| 按指令：位置/大小 | `pet-image-position-adjustment` | 仅做位置或大小调整 |
 | 按指令：文字 | `text-style-adjustment` | 仅做文字内容或样式调整 |
 | 按指令：抠图不好 | `pet-image-matting` + 依赖步骤 | 重跑抠图→补齐→模板→位置→文字 |
 | 按指令：小幅优化 | `image-quality-enhancement` | 仅做画质增强 |
