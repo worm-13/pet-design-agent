@@ -39,7 +39,7 @@ description: 检查宠物图像是否缺失耳朵或身体部分，若缺失则�
 | `body` | pet body continuation, same fur and color, natural posture |
 | 全部 | complete pet with natural ears and body, consistent fur and style |
 
-- 模型：Replicate 上使用 `stability-ai/stable-diffusion-inpainting`（或当前推荐的 inpainting 模型，见 [reference.md](../../../skills/pet-image-completion/reference.md)）。
+- 模型：Replicate 上使用 `stability-ai/stable-diffusion-inpainting`（或当前推荐的 inpainting 模型，见 [reference.md](skills/pet-image-completion/reference.md)）。
 - 需设置环境变量 `REPLICATE_API_TOKEN`。
 - 输入：`image`（原图 URL 或 data URI）、`mask`（缺失区域为白）、`prompt`（上表或类似描述）；具体入参以该模型当前 schema 为准。
 - 输出为图像 URL，需下载并保存到本地，得到 `filled_image` 路径。
@@ -56,4 +56,4 @@ description: 检查宠物图像是否缺失耳朵或身体部分，若缺失则�
 
 ## 参考
 
-- Inpainting 模型列表与 API schema 见 [reference.md](../../../skills/pet-image-completion/reference.md)。
+- Inpainting 模型列表与 API schema 见 [reference.md](skills/pet-image-completion/reference.md)。

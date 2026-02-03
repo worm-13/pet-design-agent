@@ -195,6 +195,39 @@ def composite_layers(base_image, text_layers):
 }
 ```
 
+### 应用场景示例
+
+**宠物产品定制**：
+```python
+config = {
+    "canvas": {"width": 600, "height": 600, "center": [300, 300], "radius": 250},
+    "phrases": ["LUCKY", "LUCKY", "LUCKY"],
+    "layout": {"start_angle_deg": 0, "clockwise": True},
+    "font": {"size": 36},
+    "style": {"fill_rgba": [255, 182, 193, 255]}
+}
+```
+
+**品牌徽章设计**：
+```python
+config = {
+    "canvas": {"width": 800, "height": 800, "center": [400, 400], "radius": 320},
+    "phrases": ["BRAND", "NAME", "LOGO"],
+    "layout": {"start_angle_deg": 180, "clockwise": True},
+    "spacing": {"char_tracking_px": 1.0, "word_spacing_px": 15}
+}
+```
+
+**节日问候卡片**：
+```python
+config = {
+    "canvas": {"width": 700, "height": 700, "center": [350, 350], "radius": 280},
+    "phrases": ["HAPPY", "HOLIDAYS"],
+    "layout": {"start_angle_deg": 270},
+    "style": {"fill_rgba": [255, 0, 0, 255]}
+}
+```
+
 ## 性能优化
 
 ### 字体缓存

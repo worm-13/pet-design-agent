@@ -156,6 +156,6 @@ config = {
 
 ## 参考
 
-- 技术实现细节见 [reference.md](reference.md)
+- 技术实现细节见 [reference.md](skills/circle-text-layout/reference.md)
 - 预设配置和示例见项目中的 `examples_circle_text_skill.py`
 - 现有实现参考 `skills/circle_text_skill/` 目录

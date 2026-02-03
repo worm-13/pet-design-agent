@@ -172,7 +172,7 @@ description: 编排完整宠物定制图像工作流，协调项目内技能按�
 - `final.png` — 当前最新产品图（包含圆形文字装饰）
 - `state.json` — 状态文件（多宠物格式，包含 `pets` 数组）
 
-编排器根据**文件是否存在**判断某步是否已完成，从而决定是跳过还是执行。详见 [reference.md](reference.md)。
+编排器根据**文件是否存在**判断某步是否已完成，从而决定是跳过还是执行。详见 [reference.md](skills/pet-design-orchestrator/reference.md)。
 
 ## 执行逻辑摘要
 
@@ -201,4 +201,4 @@ description: 编排完整宠物定制图像工作流，协调项目内技能按�
 ## 参考
 
 - 各技能用法与 I/O 见各技能目录下 `SKILL.md`。
-- 会话文件约定、指令解析与错误处理见 [reference.md](reference.md)。
+- 会话文件约定、指令解析与错误处理见 [reference.md](skills/pet-design-orchestrator/reference.md)。

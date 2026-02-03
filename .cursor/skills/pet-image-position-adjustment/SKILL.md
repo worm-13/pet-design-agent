@@ -52,4 +52,4 @@ python scripts/run_pet_image_position_adjustment.py <宠物PNG> <背景图路径
 
 ## 参考
 
-- 图层合成实现：[template-application](../../../skills/template-application/SKILL.md)。
+- 图层合成实现：[template-application](skills/template-application/SKILL.md)。

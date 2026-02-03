@@ -81,4 +81,4 @@ output = replicate.run(
 
 ## 更多参考
 
-- Real-ESRGAN 参数与 API 详情见 [reference.md](reference.md)。
+- Real-ESRGAN 参数与 API 详情见 [reference.md](skills/image-quality-enhancement/reference.md)。

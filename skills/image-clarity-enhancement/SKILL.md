@@ -17,7 +17,7 @@ description: 检查图像清晰度，如果图像不符合要求则调用 Real-E
 
 ## 工作流程
 
-1. **检查清晰度**：对 `image` 计算清晰度评分（0–100）。评分算法见 [reference.md](reference.md)。
+1. **检查清晰度**：对 `image` 计算清晰度评分（0–100）。评分算法见 [reference.md](skills/image-clarity-enhancement/reference.md)。
 2. **判断是否增强**：若评分 **低于** `min_quality`，则调用 Real-ESRGAN 进行增强；否则可直接使用原图路径作为 `enhanced_image`。
 3. **调用 Real-ESRGAN**：通过 Replicate 调用 `nightmareai/real-esrgan`，上传/传入图像，获取输出 URL，下载并保存为本地文件。
 4. **返回结果**：将保存后的文件路径写入 `enhanced_image` 并返回。
@@ -27,7 +27,7 @@ description: 检查图像清晰度，如果图像不符合要求则调用 Real-E
 ### 清晰度检查
 
 - 使用 Laplacian 方差衡量模糊程度，再映射到 0–100 分。
-- 映射方式与阈值换算见 [reference.md](reference.md) 中的「清晰度评分与阈值」。
+- 映射方式与阈值换算见 [reference.md](skills/image-clarity-enhancement/reference.md) 中的「清晰度评分与阈值」。
 
 ### Real-ESRGAN 调用
 
@@ -42,4 +42,4 @@ description: 检查图像清晰度，如果图像不符合要求则调用 Real-E
 
 ## 参考
 
-- Real-ESRGAN 参数与清晰度评分细节见 [reference.md](reference.md)。
+- Real-ESRGAN 参数与清晰度评分细节见 [reference.md](skills/image-clarity-enhancement/reference.md)。

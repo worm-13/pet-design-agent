@@ -13,6 +13,7 @@ alwaysApply: true
 
 - **项目技能入口**：`.cursor/skills/<skill-name>/SKILL.md`
 - **实现与脚本**：仍在项目根目录的 `skills/` 与 `scripts/`，算法逻辑未改动；`.cursor/skills/` 仅为 Cursor 可发现的入口。
+- **路径约定**：文档内引用技能或 reference 时，统一使用以项目根为基准的路径：`skills/<技能目录名>/SKILL.md`、`skills/<技能目录名>/reference.md`，不使用 `../`、`../../../` 等相对路径。
 
 ## 工作流程
 

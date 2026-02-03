@@ -58,4 +58,4 @@ python scripts/run_template_application.py <宠物PNG> template_B --bg templates
 
 ## 参考
 
-- 位置/大小调整（只改 layout 后重跑合成）：[pet-image-position-adjustment](../../../skills/pet-image-position-adjustment/SKILL.md)。
+- 位置/大小调整（只改 layout 后重跑合成）：[pet-image-position-adjustment](skills/pet-image-position-adjustment/SKILL.md)。
