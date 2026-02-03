@@ -8,6 +8,11 @@ import argparse
 import os
 import sys
 
+# 统一使用 UTF-8，避免中文路径与打印乱码
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, PROJECT_ROOT)
@@ -25,7 +30,6 @@ def main():
     parser = argparse.ArgumentParser(description="Agent 交互循环：自然语言驱动宠物设计")
     parser.add_argument("--image", "-i", default=None, help="原图路径（首次输入或重置后需提供）")
     parser.add_argument("--out-dir", "-o", default=None, help="输出目录，默认 output")
-    parser.add_argument("--use-rembg", action="store_true", help="强制使用本地 rembg 抠图")
     args = parser.parse_args()
 
     out_dir = args.out_dir or os.path.join(PROJECT_ROOT, "output")
@@ -81,7 +85,6 @@ def main():
                 image_path,
                 instruction=instruction,
                 out_dir=out_dir,
-                use_rembg=args.use_rembg,
             )
             if result and os.path.isfile(result):
                 print(f"结果: {result}")

@@ -14,12 +14,18 @@ import os
 import sys
 from typing import List, Optional
 
+# 统一使用 UTF-8，避免中文路径与打印乱码
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+
 from PIL import Image
 
 # 添加项目根目录到路径
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from skills.circle_text_skill import CircleTextLayoutSkill
+from utils.font_manager import get_font_path
 
 
 def load_config_from_file(config_path: str) -> dict:
@@ -203,6 +209,11 @@ def run_circle_text_layout(
             }
         }
 
+    # 解析字体路径（支持 ID 如「字体2」或相对路径）
+    resolved_font = get_font_path(config["font"]["path"])
+    if resolved_font:
+        config["font"]["path"] = resolved_font
+
     print(f"配置信息:")
     print(f"  画布: {config['canvas']['width']}x{config['canvas']['height']}")
     print(f"  圆心: {config['canvas']['center']}, 半径: {config['canvas']['radius']}")
@@ -281,7 +292,7 @@ def main():
     # 字体设置
     font_group = parser.add_argument_group('字体设置')
     font_group.add_argument("--font-path", default="assets/fonts/AaHuanLeBao-2.ttf",
-                           help="字体文件路径")
+                           help="字体 ID（如 字体1、字体2）或字体文件路径")
     font_group.add_argument("--font-size", type=int, default=48, help="字体大小 (默认: 48)")
 
     # 颜色设置

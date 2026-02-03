@@ -3,6 +3,8 @@ name: pet-image-matting
 description: 抠出无背景的宠物主体（透明 PNG）。用户提供宠物原图并可选 pet_type（head、half_body、full_body）时使用。输出用于图层合成，不做融合。
 ---
 
+**实现与脚本**：本技能逻辑与脚本未改动，位于项目 `skills/pet-image-matting/` 与 `scripts/`；此处为 Cursor 约定入口，便于 Agent 发现。
+
 # 宠物图像抠图技能
 
 根据用户提供的宠物原图，抠出**无背景主体**，输出**透明背景 PNG（带 alpha）**，供后续图层合成使用。不负责合背景、不融合。
@@ -55,7 +57,7 @@ description: 抠出无背景的宠物主体（透明 PNG）。用户提供宠物
 | `half_body` | Head + Upper Body（半身） | 头部 + 颈、胸、上躯干，下边界自然收于中躯干。 |
 | `full_body` | Full Body（全身） | 头至爪、四肢与尾巴完整可见，不裁切。 |
 
-每种模式使用**一段固定、完整提示词**（见 `scripts/run_pet_image_matting.py` 中 `PROMPTS`），不动态拼接。通用规则：不重绘、不风格化、不失真；边缘 crisp and clean；完全去除背景与地面阴影。详见 [reference.md](reference.md)。
+每种模式使用**一段固定、完整提示词**（见 `scripts/run_pet_image_matting.py` 中 `PROMPTS`），不动态拼接。通用规则：不重绘、不风格化、不失真；边缘 crisp and clean；完全去除背景与地面阴影。详见 [reference.md](../../../skills/pet-image-matting/reference.md)。
 
 ## 实现要点
 
@@ -77,5 +79,4 @@ description: 抠出无背景的宠物主体（透明 PNG）。用户提供宠物
 
 ## 参考
 
-- nano-banana 的 Replicate 页面与最新输入/输出 schema：[reference.md](reference.md)。
-
+- nano-banana 的 Replicate 页面与最新输入/输出 schema：[reference.md](../../../skills/pet-image-matting/reference.md)。

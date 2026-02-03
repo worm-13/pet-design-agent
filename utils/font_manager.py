@@ -20,6 +20,33 @@ def _load_registry():
         return {}
 
 
+def get_font_path(font_id_or_path: str) -> str:
+    """将字体 ID（如「字体2」）或路径解析为完整字体文件路径。"""
+    if not font_id_or_path or not isinstance(font_id_or_path, str):
+        return None
+    s = font_id_or_path.strip()
+    if not s:
+        return None
+    # 已是绝对路径且存在
+    if os.path.isabs(s) and os.path.isfile(s):
+        return s
+    # 按 ID 从 fonts.json 查找
+    registry = _load_registry()
+    if s in registry:
+        p = os.path.join(FONTS_DIR, registry[s])
+        return p if os.path.isfile(p) else None
+    # 相对路径：项目根、fonts 目录、或仅文件名
+    candidates = [
+        os.path.join(_PROJECT_ROOT, s),
+        os.path.join(FONTS_DIR, s),
+        os.path.join(FONTS_DIR, os.path.basename(s)),
+    ]
+    for p in candidates:
+        if os.path.isfile(p):
+            return p
+    return None
+
+
 def load_font(font_id: str, size: int):
     registry = _load_registry()
     fid = (font_id or "").strip() or "default"

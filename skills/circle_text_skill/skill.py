@@ -3,6 +3,7 @@
 CircleTextLayoutSkill 主模块
 三层圆形文字排版Skill
 """
+import math
 from typing import List, Optional
 from PIL import Image, ImageFont
 from .geometry import compute_phrase_anchor_angles, normalize_angle
@@ -88,11 +89,28 @@ class CircleTextLayoutSkill:
         # 计算短语锚点角度
         phrase_count = len(phrases)
         if phrase_count == 0:
-            return result_image
+            return background_image
 
         anchor_angles = compute_phrase_anchor_angles(
             phrase_count, start_angle_deg, clockwise
         )
+
+        # 短语间间隔（度）：预留间隔避免首尾重叠导致首字被盖住
+        phrase_spacing_deg = layout_config.get("phrase_spacing_deg", 0)
+        if phrase_spacing_deg > 0 and phrase_count > 0:
+            first_phrase = next((p for p in phrases if p.strip()), "")
+            if first_phrase:
+                phrase_arc = measure_phrase_arc(
+                    first_phrase, font, char_tracking_px, word_spacing_px
+                )
+                slot_arc_rad = (2 * math.pi / phrase_count) - math.radians(phrase_spacing_deg)
+                if slot_arc_rad > 0 and phrase_arc / radius > slot_arc_rad:
+                    scale = (slot_arc_rad * radius) / phrase_arc
+                    new_size = max(8, int(font_size * scale))
+                    try:
+                        font = ImageFont.truetype(font_path, new_size)
+                    except Exception:
+                        pass
 
         # 渲染每个短语
         for i, phrase in enumerate(phrases):

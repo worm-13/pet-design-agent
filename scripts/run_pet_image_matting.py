@@ -1,19 +1,15 @@
 # -*- coding: utf-8 -*-
 """
 宠物抠图：使用 google/nano-banana 从去背景图中抠出全身/半身/头部。
-API 报 E005 时自动回退到本地 rembg 抠图。
 用法: python run_pet_image_matting.py <去背景图路径> [--pet-type head|half_body|full_body] [--out 输出路径]
 """
 import argparse
 import os
 import sys
 
-# 确保脚本目录在 path 中（回退导入用）
-_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-if _SCRIPT_DIR not in sys.path:
-    sys.path.insert(0, _SCRIPT_DIR)
-
 from replicate_utils import download_url, ensure_token
+import numpy as np
+from PIL import Image
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 NANO_BANANA = "google/nano-banana"
@@ -74,14 +70,30 @@ def run_matting(image_path: str, pet_type: str = "head", out_path: str = None) -
             url = str(output)
 
         download_url(url, out_path)
+        
+        # 确保输出是RGBA格式（nano-banana可能返回RGB）
+        downloaded_img = Image.open(out_path)
+        if downloaded_img.mode != 'RGBA':
+            # 如果是RGB，尝试转换为RGBA
+            # 如果背景是白色，将白色像素设为透明
+            if downloaded_img.mode == 'RGB':
+                downloaded_img = downloaded_img.convert('RGBA')
+                # 将接近白色的像素设为透明
+                data = np.array(downloaded_img)
+                # 白色阈值（接近255,255,255的像素）
+                white_threshold = 240
+                mask = np.all(data[:, :, :3] > white_threshold, axis=2)
+                data[mask, 3] = 0  # 设置alpha为0（透明）
+                downloaded_img = Image.fromarray(data)
+            else:
+                downloaded_img = downloaded_img.convert('RGBA')
+            downloaded_img.save(out_path, "PNG")
+        
         print(f"已抠图 ({pet_type}): {out_path}")
         return out_path
 
     except ModelError as e:
-        if "E005" in str(e) or "sensitive" in str(e).lower():
-            print(f"Replicate API 报错 ({e})，回退到本地 rembg 抠图...")
-            from run_pet_image_matting_rembg import run_matting_rembg
-            return run_matting_rembg(image_path, pet_type, out_path)
+        print(f"Replicate API 报错: {e}")
         raise
 
 

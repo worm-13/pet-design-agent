@@ -133,7 +133,6 @@ python scripts/run_orchestrator.py session_001 input/宠物图.jpg --reset
 | 脚本 | 说明 | 示例 |
 |------|------|------|
 | `run_pet_image_matting.py` | 宠物抠图（nano-banana，输出透明 PNG） | `python scripts/run_pet_image_matting.py 图片.png --pet-type head --out output/head.png` |
-| `run_pet_image_matting_rembg.py` | 宠物抠图（rembg 本地，无 API，输出透明 PNG） | `python scripts/run_pet_image_matting_rembg.py 图片.png --out output/head_rembg.png`（首次会下载模型，约 1～3 分钟） |
 | `run_compose_pet_on_template.py` | **图层合成**：宠物 PNG + 背景（无 AI） | `python scripts/run_compose_pet_on_template.py output/head.png templates/backgrounds/xxx.png --position 0.5,0.5 --scale 0.6 --out output/design.png` |
 | `run_template_application.py` | 模板应用（调用 compose，支持 template_A/B） | `python scripts/run_template_application.py output/head.png template_A --out output/design.png` |
 | `run_pet_image_position_adjustment.py` | 位置/大小调整（改 layout 后重跑合成） | `python scripts/run_pet_image_position_adjustment.py output/head.png templates/backgrounds/xxx.png --position 0.5,0.62 --scale 0.55 --out output/design.png` |
@@ -146,11 +145,6 @@ python scripts/run_orchestrator.py session_001 input/宠物图.jpg --reset
 - 调用 Replicate 的脚本会先上传本地图片（若传入路径），再下载结果到 `output/` 或 `--out` 指定路径。
 - 本地脚本（模板、位置、文字）仅依赖 Pillow，无需 API token。
 
-## rembg 抠图 → 合成流程（本地无 API）
-
-1. 抠图：`python scripts/run_pet_image_matting_rembg.py input/图.jpg --out output/head_rembg.png`（首次运行会下载 u2net 模型，稍等片刻）
-2. 合成：`python scripts/run_compose_pet_on_template.py output/head_rembg.png templates/backgrounds/清新粉蓝-1.png --out output/design.png`
-
 路径含中文时建议在项目根目录用 Python 构建路径再调用，避免终端编码问题。
 
 ## 依赖
@@ -158,7 +152,6 @@ python scripts/run_orchestrator.py session_001 input/宠物图.jpg --reset
 - replicate >= 0.25.0
 - opencv-python >= 4.8.0（清晰度检测与补齐掩码）
 - Pillow >= 10.0.0（模板、位置、文字合成）
-- rembg[cpu] >= 2.0.0（可选，本地抠图无 API）
 
 ## 注意事项
 

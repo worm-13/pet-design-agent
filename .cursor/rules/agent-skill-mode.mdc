@@ -1,0 +1,68 @@
+---
+description: Agent 执行任务时优先按项目 Skill 发现并遵循 SKILL.md 执行（Agent Skill 运行模式）
+alwaysApply: true
+---
+
+# Agent Skill 运行模式
+
+## 核心要求
+
+**执行与宠物设计、抠图、模板、圆形文字、多宠物合成等相关的任务时，必须按「Skill 发现 → 读 SKILL.md → 按步骤执行」的方式工作。**
+
+## 技能位置（符合 Cursor 约定）
+
+- **项目技能入口**：`.cursor/skills/<skill-name>/SKILL.md`
+- **实现与脚本**：仍在项目根目录的 `skills/` 与 `scripts/`，算法逻辑未改动；`.cursor/skills/` 仅为 Cursor 可发现的入口。
+
+## 工作流程
+
+### 1. 任务匹配
+
+当用户请求涉及以下任一方向时，视为「相关任务」：
+
+- 宠物产品图定制、初次生成、基于指令微调
+- 抠图、去背景、模板合成、位置/大小调整
+- 普通文字、圆形文字排版
+- 多宠物合成、多只宠物合照
+- 清晰度增强、画质优化、图像补齐
+
+### 2. 技能发现
+
+- **优先**在 `.cursor/skills/` 下根据 `name`、`description`（YAML frontmatter）匹配最相关的 Skill。
+- 若需多步流程，优先阅读 **pet-design-orchestrator** 的 SKILL.md，按编排器的路由与步骤执行。
+- 单步能力（如仅圆形文字、仅抠图）直接阅读对应 Skill 的 SKILL.md。
+
+### 3. 按 Skill 执行
+
+- **先读** 匹配到的 `SKILL.md` 全文。
+- **再按** 其中的输入/输出、工作流程、脚本调用、约束执行；不跳过步骤、不自行改算法。
+- 脚本与代码调用使用项目根目录下的 `scripts/`、`skills/`（路径以项目根为基准）。
+
+### 4. 不修改原有逻辑
+
+- 所有算法、脚本、业务逻辑保持在 `skills/`、`scripts/`、`utils/` 中不变。
+- Agent 只做「读 SKILL → 调脚本/API → 按文档传参」，不重写或替换原有实现。
+
+## 技能列表（.cursor/skills/ 下）
+
+| 目录名 | 用途 |
+|--------|------|
+| `pet-design-orchestrator` | 工作流编排（单/多宠物路由，增量更新） |
+| `circle-text-layout` | 圆形文字排版与渲染 |
+| `circle-text-skill` | 圆形文字核心实现（供 circle-text-layout 使用） |
+| `pet-image-matting` | 宠物抠图（单只） |
+| `template-application` | 模板/图层合成 |
+| `pet-image-position-adjustment` | 位置与大小调整（单宠） |
+| `multi-pet-layout-adjustment` | 多宠物布局调整（按 state 重合成） |
+| `text-style-adjustment` | 普通文字图层 |
+| `change-font` | 仅更换圆形文字字体（大小/排版/颜色/位置/内容不变） |
+| `pet-image-completion` | 抠图缺失补齐 |
+| `background-removal` | 去背景（抠图前置） |
+| `image-clarity-enhancement` | 清晰度不足时增强 |
+| `image-quality-enhancement` | 画质/清晰度优化 |
+| `multi-pet-composition-enhancement` | 多宠物合成增强 |
+
+## 例外
+
+- 与上述能力无关的纯代码/文档/配置修改，可不走 Skill 流程。
+- 用户明确说「直接改代码」「不用按 skill」时，可按其指示执行。
